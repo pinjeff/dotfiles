@@ -51,6 +51,7 @@
 
   xdg.configFile = {
     "nvim/init.lua".source = neovim/init.lua;
+    "tmux/tmux.conf".source = tmux/tmux.conf;
   };
 
   # Let Home Manager install and manage itself.
