@@ -49,6 +49,10 @@
     tmux.enableShellIntegration = true;
   };
 
+  xdg.configFile = {
+    "nvim/init.lua".source = neovim/init.lua;
+  };
+
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
 }
