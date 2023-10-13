@@ -33,17 +33,14 @@ require("lazy").setup({
 		dependencies = {
 			-- Automatically install LSPs to stdpath for neovim
 			{ "williamboman/mason.nvim", config = true },
-			"williamboman/mason-lspconfig.nvim",
+			{ "williamboman/mason-lspconfig.nvim" },
 			{ "stevearc/conform.nvim" },
 
 			-- Useful status updates for LSP
 			{ "j-hui/fidget.nvim", tag = "legacy", event = "LSPAttach", opts = {} },
 
 			-- Additional lua configuration, makes nvim stuff amazing!
-			{
-				"folke/neodev.nvim",
-				opts = {},
-			},
+			{ "folke/neodev.nvim", opts = {} },
 
 			-- Auto pairs
 			{ "windwp/nvim-autopairs", event = "InsertEnter", opts = {} },
@@ -401,7 +398,6 @@ capabilities = require("cmp_nvim_lsp").default_capabilities(capabilities)
 
 -- Ensure the servers above are installed
 local mason_lspconfig = require("mason-lspconfig")
-
 mason_lspconfig.setup({
 	ensure_installed = vim.tbl_keys(servers),
 })
