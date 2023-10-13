@@ -224,7 +224,7 @@ vim.o.scrolloff = 2 -- keep somelines above and below cursor
 vim.o.signcolumn = "yes" -- always draw sign column. prevent buffer moving when adding/deleting sign
 vim.o.smartcase = true -- case-sensitive if contains capital
 vim.o.termguicolors = true -- colors in terminal
-vim.o.timeoutlen = 300
+vim.o.timeoutlen = 700
 vim.o.undofile = true -- permanent undo
 vim.o.updatetime = 250 -- update swap file more
 
