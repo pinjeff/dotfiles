@@ -178,9 +178,6 @@ require("lazy").setup({
 		},
 	},
 
-	-- "gc" to comment visual regions/lines
-	{ "numToStr/Comment.nvim", lazy = false, opts = {} },
-
 	-- Fuzzy Finder (files, lsp, etc)
 	{ "nvim-telescope/telescope.nvim", branch = "0.1.x", dependencies = { "nvim-lua/plenary.nvim" } },
 
@@ -195,14 +192,17 @@ require("lazy").setup({
 		end,
 	},
 
+	-- Treesitter Highlight, edit, and navigate code
 	{
-		-- Highlight, edit, and navigate code
 		"nvim-treesitter/nvim-treesitter",
-		dependencies = {
-			"nvim-treesitter/nvim-treesitter-textobjects",
-		},
 		build = ":TSUpdate",
+		dependencies = {
+			"JoosepAlviste/nvim-ts-context-commentstring",
+		},
 	},
+	{ "nvim-treesitter/nvim-treesitter-textobjects" },
+	{ "nvim-treesitter/nvim-treesitter-context", opts = {} },
+	{ "numToStr/Comment.nvim", lazy = false },
 }, {})
 
 -- [[ Setting options ]]
@@ -320,6 +320,11 @@ require("nvim-treesitter.configs").setup({
 	-- Add languages to be installed here that you want installed for treesitter
 	ensure_installed = { "c", "javascript", "lua", "python", "rust", "typescript", "vimdoc", "vim" },
 
+	-- commentstring option based on the cursor location in the file. The location is checked via treesitter queries.
+	context_commentstring = {
+		enable = true,
+	},
+
 	-- Autoinstall languages that are not installed. Defaults to false (but you can change for yourself!)
 	auto_install = false,
 
@@ -378,6 +383,10 @@ require("nvim-treesitter.configs").setup({
 			},
 		},
 	},
+})
+
+require("Comment").setup({
+	pre_hook = require("ts_context_commentstring.integrations.comment_nvim").create_pre_hook(),
 })
 
 -- Diagnostic keymaps
