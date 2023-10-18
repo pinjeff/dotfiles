@@ -271,7 +271,7 @@ require("conform").setup({
 		json = { { "prettierd" } },
 		lua = { "stylua" },
 		nix = { { "nixpkgs_fmt" } },
-		python = { { "black" } },
+		python = { { "ruff_format" } },
 		toml = { { "taplo" } },
 		typescript = { { "prettierd" } },
 	},
