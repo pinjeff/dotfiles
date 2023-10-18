@@ -265,6 +265,8 @@ require("conform").setup({
 		lsp_fallback = true,
 	},
 	formatters_by_ft = {
+		css = { { "prettierd" } },
+		html = { { "prettierd" } },
 		javascript = { { "prettierd" } },
 		json = { { "prettierd" } },
 		lua = { "stylua" },
