@@ -234,6 +234,7 @@ vim.keymap.set("n", "<left>", "<cmd>bp<cr>", {})
 vim.keymap.set("n", "<pageup>", "<cmd>tabnext<cr>", {})
 vim.keymap.set("n", "<pagedown>", "<cmd>tabprevious<cr>", {})
 vim.keymap.set("n", "<leader>w", "<cmd>write<cr>", {})
+vim.keymap.set("n", "<leader>f", "<cmd>Format<cr>", {})
 vim.keymap.set({ "n", "o", "v" }, "L", "$", {})
 vim.keymap.set({ "n", "o", "v" }, "H", "^", {})
 vim.keymap.set("n", "<leader><leader>", "<c-^>", {})
@@ -263,6 +264,7 @@ require("conform").setup({
 		-- These options will be passed to conform.format()
 		timeout_ms = 500,
 		lsp_fallback = true,
+		quiet = true,
 	},
 	formatters_by_ft = {
 		css = { { "prettierd" } },
