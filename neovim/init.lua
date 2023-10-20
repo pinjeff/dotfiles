@@ -203,6 +203,7 @@ require("lazy").setup({
 	{ "nvim-treesitter/nvim-treesitter-textobjects" },
 	{ "nvim-treesitter/nvim-treesitter-context", opts = {} },
 	{ "numToStr/Comment.nvim", lazy = false },
+	{ "windwp/nvim-ts-autotag" },
 }, {})
 
 -- [[ Setting options ]]
@@ -323,6 +324,11 @@ end, { desc = "[/] Fuzzily search in current buffer" })
 require("nvim-treesitter.configs").setup({
 	-- Add languages to be installed here that you want installed for treesitter
 	ensure_installed = { "c", "javascript", "lua", "python", "rust", "typescript", "vimdoc", "vim" },
+
+	-- Use treesitter to autoclose and autorename html tag
+	autotag = {
+		enable = true,
+	},
 
 	-- commentstring option based on the cursor location in the file. The location is checked via treesitter queries.
 	context_commentstring = {
