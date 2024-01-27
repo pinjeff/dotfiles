@@ -49,6 +49,10 @@
     tmux.enableShellIntegration = true;
   };
 
+  home.file = {
+    ".cargo/config.toml".source = cargo/config.toml;
+  };
+
   xdg.configFile = {
     "nvim/init.lua".source = neovim/init.lua;
     "tmux/tmux.conf".source = tmux/tmux.conf;
