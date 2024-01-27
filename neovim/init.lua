@@ -332,11 +332,6 @@ require("nvim-treesitter.configs").setup({
 		enable = true,
 	},
 
-	-- commentstring option based on the cursor location in the file. The location is checked via treesitter queries.
-	context_commentstring = {
-		enable = true,
-	},
-
 	-- Autoinstall languages that are not installed. Defaults to false (but you can change for yourself!)
 	auto_install = false,
 
@@ -395,6 +390,10 @@ require("nvim-treesitter.configs").setup({
 			},
 		},
 	},
+})
+
+require("ts_context_commentstring").setup({
+	enable_autocmd = false,
 })
 
 require("Comment").setup({
