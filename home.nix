@@ -40,6 +40,7 @@
       tealdeer
       tmux
       tokei
+      tree-sitter
     ];
   };
 
