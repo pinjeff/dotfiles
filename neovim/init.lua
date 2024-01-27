@@ -21,6 +21,7 @@ require("lazy").setup({
 	-- Quality of life
 	"tpope/vim-surround",
 	"airblade/vim-rooter",
+	{ "echasnovski/mini.align", version = "*", opts = {} },
 
 	--  The configuration is done below. Search for lspconfig to find it below.
 	{
