@@ -159,10 +159,10 @@ require("lazy").setup({
 	},
 
 	{
-		"RRethy/nvim-base16",
+		"blazkowolf/gruber-darker.nvim",
 		priority = 1000,
 		config = function()
-			vim.cmd.colorscheme("base16-catppuccin-mocha")
+			vim.cmd.colorscheme("gruber-darker")
 		end,
 	},
 
@@ -338,7 +338,7 @@ require("nvim-treesitter.configs").setup({
 	-- Autoinstall languages that are not installed. Defaults to false (but you can change for yourself!)
 	auto_install = false,
 
-	highlight = { enable = true },
+	highlight = { enable = false },
 	indent = { enable = true },
 	incremental_selection = {
 		enable = true,
