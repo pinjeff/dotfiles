@@ -271,12 +271,14 @@ require("conform").setup({
 		css = { { "prettierd" } },
 		html = { { "prettierd" } },
 		javascript = { { "prettierd" } },
+		javascriptreact = { { "prettierd" } },
 		json = { { "prettierd" } },
 		lua = { "stylua" },
 		nix = { { "nixpkgs_fmt" } },
 		python = { { "ruff_format" } },
 		toml = { { "taplo" } },
 		typescript = { { "prettierd" } },
+		typescriptreact = { { "prettierd" } },
 	},
 })
 
@@ -444,8 +446,8 @@ local on_attach = function(_, bufnr)
 	end, "[W]orkspace [L]ist Folders")
 
 	-- Create a command `:Format` local to the LSP buffer
-	vim.api.nvim_buf_create_user_command(bufnr, "Format", function(_)
-		vim.lsp.buf.format()
+	vim.api.nvim_buf_create_user_command(bufnr, "Format", function(args)
+		require("conform").format({ bufnr = args.buf })
 	end, { desc = "Format current buffer with LSP" })
 end
 
