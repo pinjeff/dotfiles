@@ -190,16 +190,10 @@ require("lazy").setup({
 	},
 
 	-- Treesitter Highlight, edit, and navigate code
-	{
-		"nvim-treesitter/nvim-treesitter",
-		build = ":TSUpdate",
-		dependencies = {
-			"JoosepAlviste/nvim-ts-context-commentstring",
-		},
-	},
+	{ "nvim-treesitter/nvim-treesitter", build = ":TSUpdate" },
 	{ "nvim-treesitter/nvim-treesitter-textobjects" },
 	{ "nvim-treesitter/nvim-treesitter-context", opts = {} },
-	{ "numToStr/Comment.nvim", lazy = false },
+	{ "folke/ts-comments.nvim", opts = {}, event = "VeryLazy" },
 	{ "windwp/nvim-ts-autotag" },
 }, {})
 
@@ -387,14 +381,6 @@ require("nvim-treesitter.configs").setup({
 			},
 		},
 	},
-})
-
-require("ts_context_commentstring").setup({
-	enable_autocmd = false,
-})
-
-require("Comment").setup({
-	pre_hook = require("ts_context_commentstring.integrations.comment_nvim").create_pre_hook(),
 })
 
 -- Diagnostic keymaps
