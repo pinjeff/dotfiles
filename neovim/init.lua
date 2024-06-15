@@ -229,12 +229,84 @@ require("lazy").setup({
 		},
 	},
 
-	-- Treesitter Highlight, edit, and navigate code
-	{ "nvim-treesitter/nvim-treesitter", build = ":TSUpdate" },
-	{ "nvim-treesitter/nvim-treesitter-textobjects" },
-	{ "nvim-treesitter/nvim-treesitter-context", opts = {} },
-	{ "folke/ts-comments.nvim", opts = {}, event = "VeryLazy" },
-	{ "windwp/nvim-ts-autotag" },
+	{ -- Highlight, edit, and navigate code
+		"nvim-treesitter/nvim-treesitter",
+		build = ":TSUpdate",
+		dependencies = {
+			{ "folke/ts-comments.nvim", opts = {}, event = "VeryLazy" },
+			{ "nvim-treesitter/nvim-treesitter-textobjects" },
+			{ "nvim-treesitter/nvim-treesitter-context", opts = {} },
+			{ "windwp/nvim-ts-autotag", opts = {} },
+		},
+		opts = {
+			ensure_installed = { "bash", "c", "diff", "html", "lua", "luadoc", "markdown", "vim", "vimdoc" },
+			auto_install = true,
+			highlight = {
+				enable = true,
+				-- Some languages depend on vim's regex highlighting system (such as Ruby) for indent rules.
+				--  If you are experiencing weird indenting issues, add the language to
+				--  the list of additional_vim_regex_highlighting and disabled languages for indent.
+				additional_vim_regex_highlighting = { "ruby" },
+			},
+			indent = { enable = true, disable = { "ruby" } },
+			incremental_selection = {
+				enable = true,
+				keymaps = {
+					init_selection = "<c-space>",
+					node_incremental = "<c-space>",
+					scope_incremental = "<c-s>",
+					node_decremental = "<M-space>",
+				},
+			},
+			textobjects = {
+				select = {
+					enable = true,
+					lookahead = true, -- Automatically jump forward to textobj, similar to targets.vim
+					keymaps = {
+						-- You can use the capture groups defined in textobjects.scm
+						["aa"] = "@parameter.outer",
+						["ia"] = "@parameter.inner",
+						["af"] = "@function.outer",
+						["if"] = "@function.inner",
+						["ac"] = "@class.outer",
+						["ic"] = "@class.inner",
+					},
+				},
+				move = {
+					enable = true,
+					set_jumps = true, -- whether to set jumps in the jumplist
+					goto_next_start = {
+						["]m"] = "@function.outer",
+						["]]"] = "@class.outer",
+					},
+					goto_next_end = {
+						["]M"] = "@function.outer",
+						["]["] = "@class.outer",
+					},
+					goto_previous_start = {
+						["[m"] = "@function.outer",
+						["[["] = "@class.outer",
+					},
+					goto_previous_end = {
+						["[M"] = "@function.outer",
+						["[]"] = "@class.outer",
+					},
+				},
+				swap = {
+					enable = true,
+					swap_next = {
+						["<leader>a"] = "@parameter.inner",
+					},
+					swap_previous = {
+						["<leader>A"] = "@parameter.inner",
+					},
+				},
+			},
+		},
+		config = function(_, opts)
+			require("nvim-treesitter.configs").setup(opts)
+		end,
+	},
 }, {})
 
 -- [[ Setting options ]]
@@ -324,76 +396,6 @@ vim.api.nvim_create_user_command("Format", function(args)
 	end
 	require("conform").format({ async = true, lsp_fallback = true, range = range })
 end, { range = true })
-
--- [[ Configure Treesitter ]]
-require("nvim-treesitter.configs").setup({
-	-- Add languages to be installed here that you want installed for treesitter
-	ensure_installed = { "c", "javascript", "lua", "python", "rust", "typescript", "vimdoc", "vim" },
-
-	-- Use treesitter to autoclose and autorename html tag
-	autotag = {
-		enable = true,
-	},
-
-	-- Autoinstall languages that are not installed. Defaults to false (but you can change for yourself!)
-	auto_install = false,
-
-	highlight = { enable = true },
-	indent = { enable = true },
-	incremental_selection = {
-		enable = true,
-		keymaps = {
-			init_selection = "<c-space>",
-			node_incremental = "<c-space>",
-			scope_incremental = "<c-s>",
-			node_decremental = "<M-space>",
-		},
-	},
-	textobjects = {
-		select = {
-			enable = true,
-			lookahead = true, -- Automatically jump forward to textobj, similar to targets.vim
-			keymaps = {
-				-- You can use the capture groups defined in textobjects.scm
-				["aa"] = "@parameter.outer",
-				["ia"] = "@parameter.inner",
-				["af"] = "@function.outer",
-				["if"] = "@function.inner",
-				["ac"] = "@class.outer",
-				["ic"] = "@class.inner",
-			},
-		},
-		move = {
-			enable = true,
-			set_jumps = true, -- whether to set jumps in the jumplist
-			goto_next_start = {
-				["]m"] = "@function.outer",
-				["]]"] = "@class.outer",
-			},
-			goto_next_end = {
-				["]M"] = "@function.outer",
-				["]["] = "@class.outer",
-			},
-			goto_previous_start = {
-				["[m"] = "@function.outer",
-				["[["] = "@class.outer",
-			},
-			goto_previous_end = {
-				["[M"] = "@function.outer",
-				["[]"] = "@class.outer",
-			},
-		},
-		swap = {
-			enable = true,
-			swap_next = {
-				["<leader>a"] = "@parameter.inner",
-			},
-			swap_previous = {
-				["<leader>A"] = "@parameter.inner",
-			},
-		},
-	},
-})
 
 -- Diagnostic keymaps
 vim.keymap.set("n", "<leader>e", vim.diagnostic.open_float, { desc = "Open floating diagnostic message" })
