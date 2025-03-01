@@ -384,65 +384,35 @@ require("lazy").setup({
 				hl(0, "MultiCursorDisabledSign", { link = "SignColumn" })
 			end,
 		},
-		{ "VonHeikemen/lsp-zero.nvim", branch = "v4.x" },
 		{ "williamboman/mason.nvim" },
 		{ "williamboman/mason-lspconfig.nvim" },
-		{ "neovim/nvim-lspconfig" },
 		{
-			"hrsh7th/nvim-cmp",
-			dependencies = {
-				{ "L3MON4D3/LuaSnip" },
-				{ "hrsh7th/cmp-buffer" },
-				{ "hrsh7th/cmp-nvim-lsp" },
-				{ "hrsh7th/cmp-path" },
-				{ "rafamadriz/friendly-snippets" },
-				{ "saadparwaiz1/cmp_luasnip" },
+			"saghen/blink.cmp",
+			dependencies = { "rafamadriz/friendly-snippets" },
+			-- use a release tag to download pre-built binaries
+			version = "v0.13.1",
+			opts = {
+				keymap = { preset = "default" },
+				sources = { default = { "lsp", "path", "snippets", "buffer" } },
+				fuzzy = { implementation = "prefer_rust_with_warning" },
 			},
+			opts_extend = { "sources.default" },
+		},
+		{
+			"neovim/nvim-lspconfig",
+			dependencies = { "saghen/blink.cmp" },
+			opts = { servers = {} },
+			config = function(_, opts)
+				local lspconfig = require("lspconfig")
+				for server, config in pairs(opts.servers) do
+					config.capabilities = require("blink.cmp").get_lsp_capabilities(config.capabilities)
+					lspconfig[server].setup(config)
+				end
+			end,
 		},
 		{ "j-hui/fidget.nvim", opts = {} },
-		{
-			"folke/trouble.nvim",
-			-- settings without a patched font or icons
-			opts = {
-				icons = false,
-				fold_open = "v", -- icon used for open folds
-				fold_closed = ">", -- icon used for closed folds
-				indent_lines = false, -- add an indent guide below the fold icons
-				signs = {
-					-- icons / text used for a diagnostic
-					error = "error",
-					warning = "warn",
-					hint = "hint",
-					information = "info",
-				},
-				use_diagnostic_signs = false, -- enabling this will use the signs defined in your lsp client
-			},
-		},
+		{ "folke/trouble.nvim", opts = {} },
 	},
-})
-
-local lsp_zero = require("lsp-zero")
-
-local lsp_attach = function(client, bufnr)
-	local opts = { buffer = bufnr }
-
-	vim.keymap.set("n", "K", vim.lsp.buf.hover, opts)
-	vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)
-	vim.keymap.set("n", "gD", vim.lsp.buf.declaration, opts)
-	vim.keymap.set("n", "gi", vim.lsp.buf.implementation, opts)
-	vim.keymap.set("n", "go", vim.lsp.buf.type_definition, opts)
-	vim.keymap.set("n", "gr", vim.lsp.buf.references, opts)
-	vim.keymap.set("n", "gs", vim.lsp.buf.signature_help, opts)
-	vim.keymap.set("n", "<leader>r", vim.lsp.buf.rename, opts)
-	vim.keymap.set({ "n", "x" }, "<F3>", function() vim.lsp.buf.format({ async = true }) end, opts)
-	vim.keymap.set("n", "<leader>a", vim.lsp.buf.code_action, opts)
-end
-
-lsp_zero.extend_lspconfig({
-	sign_text = true,
-	lsp_attach = lsp_attach,
-	float_border = "rounded",
-	capabilities = require("cmp_nvim_lsp").default_capabilities(),
 })
 
 require("mason").setup({})
@@ -450,35 +420,67 @@ require("mason-lspconfig").setup({
 	handlers = { function(server_name) require("lspconfig")[server_name].setup({ single_file_support = true }) end },
 })
 
-local cmp = require("cmp")
-local cmp_action = lsp_zero.cmp_action()
+vim.api.nvim_create_autocmd("LspAttach", {
+	group = vim.api.nvim_create_augroup("lsp-attach", { clear = true }),
+	callback = function(event)
+		local map = function(keys, func, desc, mode)
+			mode = mode or "n"
+			vim.keymap.set(mode, keys, func, { buffer = event.buf, desc = "LSP: " .. desc })
+		end
 
--- this is the function that loads the extra snippets
--- from rafamadriz/friendly-snippets
-require("luasnip.loaders.from_vscode").lazy_load()
+		map("gd", require("telescope.builtin").lsp_definitions, "[G]oto [D]efinition")
+		map("gr", require("telescope.builtin").lsp_references, "[G]oto [R]eferences")
+		map("gI", require("telescope.builtin").lsp_implementations, "[G]oto [I]mplementation")
+		map("go", vim.lsp.buf.type_definition, "[G]oto type definition")
+		map("gs", vim.lsp.buf.signature_help, "[G]oto [S]ingature help")
+		map("<leader>D", require("telescope.builtin").lsp_type_definitions, "Type [D]efinition")
+		map("<leader>ds", require("telescope.builtin").lsp_document_symbols, "[D]ocument [S]ymbols")
+		map("<leader>ws", require("telescope.builtin").lsp_dynamic_workspace_symbols, "[W]orkspace [S]ymbols")
+		map("<leader>rn", vim.lsp.buf.rename, "[R]e[n]ame")
+		map("<leader>a", vim.lsp.buf.code_action, "Code [A]ction", { "n", "x" })
+		map("gD", vim.lsp.buf.declaration, "[G]oto [D]eclaration")
 
-cmp.setup({
-	sources = {
-		{ name = "path" },
-		{ name = "nvim_lsp" },
-		{ name = "luasnip", keyword_length = 2 },
-		{ name = "buffer", keyword_length = 3 },
-	},
-	window = {
-		completion = cmp.config.window.bordered(),
-		documentation = cmp.config.window.bordered(),
-	},
-	snippet = {
-		expand = function(args) require("luasnip").lsp_expand(args.body) end,
-	},
-	mapping = cmp.mapping.preset.insert({
-		["<C-Space>"] = cmp.mapping.complete(),
-		["<C-u>"] = cmp.mapping.scroll_docs(-4),
-		["<C-d>"] = cmp.mapping.scroll_docs(4),
-		["<C-f>"] = cmp_action.luasnip_jump_forward(),
-		["<C-b>"] = cmp_action.luasnip_jump_backward(),
-	}),
-	-- note: if you are going to use lsp-kind (another plugin)
-	-- replace the line below with the function from lsp-kind
-	formatting = lsp_zero.cmp_format({ details = true }),
+		local function client_supports_method(client, method, bufnr)
+			if vim.fn.has("nvim-0.11") == 1 then
+				return client:supports_method(method, bufnr)
+			else
+				return client.supports_method(method, { bufnr = bufnr })
+			end
+		end
+
+		local client = vim.lsp.get_client_by_id(event.data.client_id)
+		if
+			client
+			and client_supports_method(client, vim.lsp.protocol.Methods.textDocument_documentHighlight, event.buf)
+		then
+			local highlight_augroup = vim.api.nvim_create_augroup("lsp-highlight", { clear = false })
+			vim.api.nvim_create_autocmd({ "CursorHold", "CursorHoldI" }, {
+				buffer = event.buf,
+				group = highlight_augroup,
+				callback = vim.lsp.buf.document_highlight,
+			})
+
+			vim.api.nvim_create_autocmd({ "CursorMoved", "CursorMovedI" }, {
+				buffer = event.buf,
+				group = highlight_augroup,
+				callback = vim.lsp.buf.clear_references,
+			})
+
+			vim.api.nvim_create_autocmd("LspDetach", {
+				group = vim.api.nvim_create_augroup("lsp-detach", { clear = true }),
+				callback = function(event2)
+					vim.lsp.buf.clear_references()
+					vim.api.nvim_clear_autocmds({ group = "lsp-highlight", buffer = event2.buf })
+				end,
+			})
+		end
+
+		if client and client_supports_method(client, vim.lsp.protocol.Methods.textDocument_inlayHint, event.buf) then
+			map(
+				"<leader>th",
+				function() vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled({ bufnr = event.buf })) end,
+				"[T]oggle Inlay [H]ints"
+			)
+		end
+	end,
 })
