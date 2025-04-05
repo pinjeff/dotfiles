@@ -80,7 +80,7 @@ require("lazy").setup({
 		{ "junegunn/vim-easy-align", config = function() vim.keymap.set({ "n", "v" }, "ga", ":EasyAlign<cr>") end },
 
 		-- visual
-		-- { "RRethy/base16-nvim", config = function() vim.cmd.colorscheme("base16-catppuccin-mocha") end },
+		{ "RRethy/base16-nvim", config = function() vim.cmd.colorscheme("base16-catppuccin-mocha") end },
 		{
 			"nvim-lualine/lualine.nvim",
 			opts = { options = { icons_enabled = false, component_separators = "|", section_separators = "" } },
