@@ -28,12 +28,15 @@ in
     # environment.
     packages = with pkgs; [
       bat
+      bun
       croc
       delta
       du-dust
       entr
       eza
       fd
+      fish
+      jq
       lazydocker
       lazygit
       lf
@@ -46,6 +49,7 @@ in
       tmux
       tokei
       tree-sitter
+      zola
     ];
   };
 
