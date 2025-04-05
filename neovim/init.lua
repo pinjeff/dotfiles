@@ -264,12 +264,13 @@ require("lazy").setup({
 			opts = {
 				formatters_by_ft = {
 					html = { "prettierd" },
-					nix = { "nixpkgs_fmt" },
 					javascript = { "prettierd" },
 					json = { "prettierd" },
 					lua = { "stylua" },
 					markdown = { "prettierd" },
+					nix = { "nixpkgs_fmt" },
 					toml = { "taplo" },
+					yaml = { "prettierd" },
 				},
 				format_on_save = { timeout_ms = 700, lsp_format = "fallback" },
 			},
