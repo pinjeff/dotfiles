@@ -1,0 +1,19 @@
+{
+  "telemetry": {
+    "metrics": false,
+    "diagnostics": false
+  },
+
+  "buffer_font_family": "Iosevka Curly",
+  "ui_font_size": 16,
+  "buffer_font_size": 18,
+  "format_on_save": "on",
+
+  "vim_mode": true,
+  "vim": {
+    "highlight_on_yank_duration": 1000,
+    "use_smartcase_find": true
+  },
+  "cursor_blink": false,
+  "relative_line_numbers": true
+}

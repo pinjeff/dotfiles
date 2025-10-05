@@ -1,0 +1,33 @@
+[
+  {
+    "context": "VimControl",
+    "bindings": {
+      "space w": ["workspace::Save", {}],
+      "space space": ["workspace::SendKeystrokes", "ctrl-^"],
+      "L": ["workspace::SendKeystrokes", "g $"],
+      "H": ["workspace::SendKeystrokes", "g ^"],
+      "j": ["workspace::SendKeystrokes", "g j"],
+      "k": ["workspace::SendKeystrokes", "g k"],
+      "K": "editor::Hover",
+      "space r": "editor::Rename",
+      "space a": "editor::ToggleCodeActions",
+      "g r": "editor::FindAllReferences",
+      "space f": "editor::Format",
+      "[": "editor::GoToPreviousDiagnostic",
+      "]": "editor::GoToDiagnostic"
+    }
+  },
+  {
+    "context": "Editor && vim_mode == insert",
+    "bindings": {
+      "ctrl-j": "vim::NormalBefore",
+      "ctrl-k": "vim::NormalBefore"
+    }
+  },
+  {
+    "context": "Editor && vim_mode == visual",
+    "bindings": {
+      "s": "vim::PushAddSurrounds"
+    }
+  }
+]
