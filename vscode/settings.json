@@ -1,0 +1,57 @@
+{
+  // general settings
+  "editor.codeLens": false,
+  "editor.lineNumbers": "relative",
+  "editor.formatOnSave": true,
+  "editor.fontFamily": "Iosevka Curly, Consolas, 'Courier New', monospace",
+  "editor.fontWeight": "bold",
+  "editor.minimap.enabled": false,
+  "editor.renderWhitespace": "none",
+  "editor.renderControlCharacters": false,
+  "editor.cursorBlinking": "solid",
+  "editor.inlayHints.enabled": "offUnlessPressed",
+  "breadcrumbs.enabled": false,
+  "workbench.startupEditor": "none",
+  "update.showReleaseNotes": false,
+  "telemetry.telemetryLevel": "off",
+  "workbench.colorTheme": "Catppuccin Macchiato",
+  "window.zoomLevel": 2,
+  "emmet.excludeLanguages": ["markdown"],
+  "[html][typescript][json][jsonc]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+
+  // vim
+  "vim.enableNeovim": true,
+  "vim.useSystemClipboard": true,
+  "vim.incsearch": true,
+  "vim.ignorecase": true,
+  "vim.smartcase": true,
+  "vim.hlsearch": true,
+  "vim.highlightedyank.enable": true,
+  "vim.highlightedyank.duration": 700,
+  "vim.leader": "<space>",
+  "vim.insertModeKeyBindings": [
+    { "before": ["<c-j>"], "after": ["<esc>"] },
+    { "before": ["<c-k>"], "after": ["<esc>"] }
+  ],
+  "vim.normalModeKeyBindings": [
+    { "before": ["leader", "w"], "commands": ["workbench.action.files.save"] },
+    { "before": ["leader", "leader"], "after": ["<c-^>"] },
+    { "before": ["L"], "after": ["g", "$"] },
+    { "before": ["H"], "after": ["g", "^"] },
+    { "before": ["j"], "after": ["g", "j"] },
+    { "before": ["k"], "after": ["g", "k"] },
+    { "before": ["K"], "commands": ["editor.action.showHover"] },
+    { "before": ["leader", "r"], "commands": ["editor.action.rename"] },
+    { "before": ["leader", "a"], "commands": ["editor.action.codeAction"] },
+    { "before": ["g", "r"], "commands": ["editor.action.goToReferences"] },
+    { "before": ["leader", "f"], "commands": ["editor.action.formatDocument"] },
+    { "before": ["]"], "commands": ["editor.action.marker.nextInFiles"] },
+    { "before": ["["], "commands": ["editor.action.marker.prevInFiles"] }
+  ],
+  "vim.operatorPendingModeKeyBindings": [
+    { "before": ["L"], "after": ["g", "$"] },
+    { "before": ["H"], "after": ["g", "^"] }
+  ]
+}
